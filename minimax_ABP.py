@@ -17,7 +17,7 @@ Created on Thu Apr 16 23:16:32 2015
 
 # Minimax will take in the difficulty as an input, but nothing else (we assume
 # this will have to be implented as an if else clause for different states)
-
+"""
 class Minimax(object):
     
     def bestMove(self):
@@ -35,3 +35,12 @@ class Minimax(object):
             # check 2 moves ahead for better AI 
             # here we will use the genetic algorithm?
         def 
+"""
+class Minimax(object):
+    
+    def __init__(self, state):
+        self.state = state
+        
+    def bestMove(difficulty, state, color):
+            return 3
+        

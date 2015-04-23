@@ -5,7 +5,7 @@ Created on Thu Apr 16 23:10:28 2015
 @author: RishiBagrodia
 """
 
-from board import * # this will definitely import the GUI from board
+from connect4 import * # this will definitely import the GUI from board
 
 def main ():
     
@@ -21,8 +21,8 @@ def main ():
     player1 = game.players[0]
     player2 = game.players[1]
     
-    p1_wins = [0,0,0] # for w/l/ties
-    p2_wins = [0,0,0] # w/l/t
+    p1_stats = [0,0,0] #wins/losses/ties
+    p2_stats = [0,0,0]
     
     exit = False
     while not exit:
@@ -30,17 +30,24 @@ def main ():
             game.nextMove() # keep game going as long as not done
         
             # THESE MUST BE DEFINED IN BOARD.PY
-          game.checkfor_fours
-          game.print_board
+            game.checkfor_fours
+            game.print_board
           
           # DEFINE WINNER IN BOARD.PY AS WELL
         if game.has_won == player1: 
-            p1_wins(1) += 1
+            p1_stats[0] += 1
+            p2_stats[1] += 1
+            
         
         elif game.has_won == player2:
-            p2_wins(1) += 1
-        
-        printStats(p1_wins, p2_wins)
+            p2_stats[0] += 1
+            p1_stats[1] += 1
+            
+        else:
+            p2_stats[2] += 1
+            p1_stats[2] += 1
+            
+        printStats(p1_stats, p2_stats)
         
         while True:
             play_again = str(raw_input("Would you like to play again? "))
@@ -59,5 +66,5 @@ def main ():
 def printStats(p1_wins, p2_wins):
     # WRITE A PRINT STATS COMMAND TO PRINT ALL THE STATS FOR PLAYER/AI BELOW
     # BOARD
-if __name__ == "__main__": # Default "main method" idiom.
-    main()
+    if __name__ == "__main__": # Default "main method" idiom.
+        main()

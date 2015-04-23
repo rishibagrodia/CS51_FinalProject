@@ -21,7 +21,7 @@ Created on Thu Apr 16 22:50:40 2015
 
 # This component will ensure complete board functionality (not all of the display)
 # as a lot will be in main.py as well. 
-
+"""
 class Game(object):
     #definitions for variables
     # board
@@ -72,8 +72,7 @@ class Game(object):
             else:
                 print("Game was a draw")
 class Player(object):
-    """ The human player object
-    """
+
     
     type = None # possible types are "Human" and "AI"
     name = None
@@ -99,8 +98,7 @@ class Player(object):
 
 
 class AIPlayer(Player):
-    """ Must implement minimax alg for this. 
-    """
+
     
     difficulty = None
     def __init__(self, name, color, difficulty=5):
@@ -119,3 +117,4 @@ class AIPlayer(Player):
         m = Minimax(state)
         best_move, value = m.bestMove(self.difficulty, state, self.color)
         return best_move
+"""

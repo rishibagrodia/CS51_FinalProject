@@ -7,10 +7,8 @@
 # Connect 4 Module
 # February 27, 2012
 
-import random
 import os
-import time
-from minimax import Minimax
+from minimax_ABP import Minimax
 
 class Game(object):
     """ Game object that holds state of Connect 4 board and game values
