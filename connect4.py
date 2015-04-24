@@ -346,7 +346,7 @@ class AIPlayer(Player):
         #time.sleep(random.randrange(8, 17, 1)/10.0)
         #return random.randint(0, 6)
         
-        m = Minimax(state)
+        m = Minimax(state, self.color)
         best_move = m.bestMove(self.difficulty, state, self.color)
         return best_move
 

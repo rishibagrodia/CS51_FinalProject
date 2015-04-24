@@ -36,7 +36,6 @@ class Minimax(object):
             # here we will use the genetic algorithm?
         def 
 """
-from connect4 import Game
 
 class node(object):
     def __init__(self, value, children = []):
@@ -48,23 +47,20 @@ class Minimax(object):
     def __init__(self, state, color):
         self.state = state
         self.color = color
-        
-    def bestMove(self, difficulty, state, color):
-        return 3
      
     def make_children(self, state, color, depth):
         if depth > 0:
-            children = []            
-            new_states = []            
+            children = [None] * 7            
+            new_states = [None] * 7            
             for i in range(7):
                 new_states[i] = state
                 for j in xrange(6):
                     if new_states[i][j][i] == ' ':
                         new_states[i][j][i] = color
             for i in range(7):
-                if color == Game.colors[1]:
-                    color = Game.colors[2]
-                else: color = Game.colors[1]
+                if color == "x":
+                    color = "o"
+                else: color = "x"
                 children[i]=node(new_states[i], self.make_children(new_states[i], color, depth-1))
             return children
 
@@ -85,24 +81,30 @@ class Minimax(object):
 
     def minimax(self, node, depth, color):
         if depth == 0: # or node is a terminal node
-            return rank(node[0])
-        if color == color[1]:
+            return self.rank(node[0])
+        if color == "o":
             bestValue = -10
             for i in xrange(7):
-                val = minimax(node[1][i], depth - 1, color[1])
+                val = self.minimax(node[1][i], depth - 1, "x")
                 bestValue = max(bestValue, val)
             return bestValue
         else:
             bestValue = 10
             for i in xrange(7):
-                val = minimax(node[1][i], depth - 1, color[0])
+                val = self.minimax(node[1][i], depth - 1, 'o')
                 bestValue = min(bestValue, val)
             return bestValue
 
-(* Initial call for maximizing player *)
-minimax(origin, depth, TRUE)
-        
-        
-    def bestmove1(self, difficulty, state, color):
+    def bestestMove(self, node, color, depth):
+        bestMove = None        
+        bestValue = -10        
+        for i in xrange(7):
+            currentval = self.minimax(node[1][i], depth, color)
+            if currentval > bestValue:
+                bestValue = currentval
+                bestMove = i
+        return bestMove
+
+    def bestMove(self, difficulty, state, color):
         tree = self.build_tree(state, color, difficulty)
-        
+        return self.bestestMove(tree[0], color, difficulty)
