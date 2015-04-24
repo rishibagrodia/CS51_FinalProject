@@ -62,18 +62,12 @@ class Minimax(object):
                     if new_states[i][j][i] == ' ':
                         new_states[i][j][i] = color
             for i in range(7):
-                if color == colors[1]:
-                    color = colors[2]
-                else: color = colors[1]
-                children[i]=node(new_states[i], make_children(new_states[i], color, depth-1))
+                if color == Game.colors[1]:
+                    color = Game.colors[2]
+                else: color = Game.colors[1]
+                children[i]=node(new_states[i], self.make_children(new_states[i], color, depth-1))
             return children
 
         
     def build_tree(self, state, color, depth):       
-        return node(state, self.make_children(state, color, depth)
-        
-    
-    def game_over(self, state_new):
-        Game.checkForFours
-        
-        
+        return node(state, self.make_children(state, color, depth))
