@@ -88,7 +88,7 @@ class Game(object):
         if self.turn == self.players[0]:
             self.turn = self.players[1]
         else:
-		    self.turn = self.players[0]
+            self.turn = self.players[0]
 
         # increment the round
         self.round += 1
