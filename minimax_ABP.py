@@ -71,3 +71,38 @@ class Minimax(object):
         
     def build_tree(self, state, color, depth):       
         return node(state, self.make_children(state, color, depth))
+        
+    def rank(self, state, color):
+        rank = 0               
+        for i in xrange(7):
+            colcount = 0
+            for j in xrange(6):
+                if state[i][j] == state[i][j+1]:
+                    colcount += 1
+                else: break                    
+            if colcount >= 4:
+                rank += 10                
+
+    def minimax(self, node, depth, color):
+        if depth == 0: # or node is a terminal node
+            return rank(node[0])
+        if color == color[1]:
+            bestValue = -10
+            for i in xrange(7):
+                val = minimax(node[1][i], depth - 1, color[1])
+                bestValue = max(bestValue, val)
+            return bestValue
+        else:
+            bestValue = 10
+            for i in xrange(7):
+                val = minimax(node[1][i], depth - 1, color[0])
+                bestValue = min(bestValue, val)
+            return bestValue
+
+(* Initial call for maximizing player *)
+minimax(origin, depth, TRUE)
+        
+        
+    def bestmove1(self, difficulty, state, color):
+        tree = self.build_tree(state, color, difficulty)
+        
