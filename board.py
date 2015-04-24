@@ -35,7 +35,7 @@ class Game(object):
             # switch turn from comp to player and vice versa
     def pause_game(self):
         # pause timer, and don't let player or comp move 
-    def undo(self):
+be    def undo(self):
             # undos a move if player goofs by accident
     def game_over(self):
         # check available moves, check if it is a stalemate, check next move

@@ -103,7 +103,7 @@ class Game(object):
             # this would be a stalemate :(
             return
         
-        # move is the column that player want's to play
+        # move is the column that player wants to play
         move = player.move(self.board)
 
         for i in xrange(6):
@@ -347,7 +347,7 @@ class AIPlayer(Player):
         #return random.randint(0, 6)
         
         m = Minimax(state)
-        best_move, value = m.bestMove(self.difficulty, state, self.color)
+        best_move = m.bestMove(self.difficulty, state, self.color)
         return best_move
 
 

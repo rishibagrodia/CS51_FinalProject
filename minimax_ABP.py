@@ -22,7 +22,7 @@ class Minimax(object):
     
     def bestMove(self):
         def search(....):
-            # serach the tree using alpha-beta pruning
+            # search the tree using alpha-beta pruning
         def is_legal(self):
             # checks if the best move is a legal move (probably should be)
             # but good extra corner case check given full board
@@ -36,11 +36,38 @@ class Minimax(object):
             # here we will use the genetic algorithm?
         def 
 """
+from connect4 import Game
+
+class node(object):
+    def __init__(self, value, children = []):
+        self.value = value
+        self.children = children
+
 class Minimax(object):
     
-    def __init__(self, state):
+    def __init__(self, state, color):
         self.state = state
+        self.color = color
         
-    def bestMove(difficulty, state, color):
-            return 3
+    def bestMove(self, difficulty, state, color):
+        return 3
+     
+    def make_children(self, state, color):
+            children = []
+            for i in range(7):
+                children[i]=state
+                for j in xrange(6):
+                    if children[i][j][i] == ' ':
+                        children[i][j][i] = color
+            return children
+        
+    def build_tree(self, state, color, depth):       
+        tree = node(state, self.make_children(state, color))
+        build_tree(self, state, color, depth-1)
+            
+            
+    
+    def game_over(self, state_new):
+        Game.checkForFours
+        
         
