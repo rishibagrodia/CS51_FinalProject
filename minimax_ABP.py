@@ -129,4 +129,4 @@ class Minimax(object):
 
     def bestMove(self, difficulty, state, color):
         tree = self.build_tree(state, color, difficulty)      
-        return self.bestestMove(tree, color, difficulty)
+        return 5#self.bestestMove(tree, color, difficulty)

@@ -106,9 +106,17 @@ class Game(object):
             return
         
         # move is the column that player want's to play
+        
+        mutable = self.board
+        permenent = self.board
+        
         move = player.move(self.board)
+        print "THE CURRENT MOVE IS:",move
+        print "STATE BEFORE MOVE"
+        self.printState()
 
         for i in xrange(6):
+            print self.board[i][move]
             if self.board[i][move] == ' ':
                 self.board[i][move] = player.color
                 self.switchTurn()
@@ -282,9 +290,6 @@ class Game(object):
 	
     def printState(self):
         # cross-platform clear screen
-        os.system( [ 'clear', 'cls' ][ os.name == 'nt' ] )
-        print(u"{0}!".format(self.game_name))
-        print("Round: " + str(self.round))
 
         for i in xrange(5, -1, -1):
             print("\t"),
