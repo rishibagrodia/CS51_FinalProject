@@ -51,26 +51,42 @@ class Minimax(object):
         self.state = state
         self.color = color
      
-    def make_children(self, tree, state, color, depth):
-        if depth > 0:            
-            new_states = [None] * 7            
-            for i in range(7):
-                new_states[i] = state
+     
+#    def make_children(self, tree, state, color, depth):
+ #       if depth > 0:            
+  #          new_states = [None] * 7            
+   #         for i in range(7):
+    #            new_states[i] = state
        #         for j in xrange(6):
         #            if new_states[i][j][i] == ' ':
          #               new_states[i][j][i] = color
-            for i in range(7):
-                if color == "x":
-                    color = "o"
-                else: color = "x"
-                currentTree = tree.add_child(node(new_states[i]))
-                self.make_children(currentTree.children[i], new_states[i], color, depth-1)
+     #       for i in range(7):
+      #          if color == "x":
+       #             color = "o"
+        #        else: color = "x"
+         #       tree.add_child(node(new_states[i]))
+          #      self.make_children(tree.children[i], new_states[i], color, depth-1)
+      #  return tree
 
         
     def build_tree(self, state, color, depth):       
-        tree = node(state)
-        self.make_children(tree, state, color, depth)
-        return tree
+        tree = node(state)        
+        if depth == 0:
+            return tree
+        else:
+            new_states = [None] * 7
+            for i in xrange(7):
+                new_states[i] = state
+                for j in xrange(6):
+                    if new_states[i][j][i] == ' ':
+                        new_states[i][j][i] = color                            
+            if color == "x":
+                color = "o"
+            else: color = "x"
+            for i in xrange(7):
+                tree.add_child(self.build_tree(new_states[i], color, depth-1))
+            return tree
+                    
         
     def rank(self, state, color):
         rank = 0               
