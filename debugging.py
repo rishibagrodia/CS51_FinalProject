@@ -200,17 +200,18 @@ def rank(state):
             other_four = check_board(state, hum, 4)
             other_two = check_board(state, hum, 2)
             
-            rank = -100 * other_two
+            rank = 100 * other_three - 50 * own_two
             return rank
         
         
 def minimax(node, depth, me):      
         if depth == 0 or node.children == []:
+            print rank(node.value)
             return rank(node.value)
-        if me == True:
+        if me:
             bestValue = -100000
             for i in xrange(7):
-                val = minimax(node.children[i], depth - 1, False)
+                val = minimax(node.children[i], depth - 1, False)         
                 bestValue = max(bestValue, val)
             return bestValue
         else:
@@ -219,6 +220,17 @@ def minimax(node, depth, me):
                 val = minimax(node.children[i], depth - 1, True)
                 bestValue = min(bestValue, val)
             return bestValue     
+            
+        
+def bestestMove(self, node, depth):     
+        bestMove = None
+        bestValue = -100000        
+        for i in xrange(7):
+            currentval = self.minimax(node.children[i], depth, True)
+            if currentval > bestValue:
+                bestValue = currentval
+                bestMove = i
+        return bestMove      
         
         
         
@@ -233,18 +245,22 @@ for i in xrange(6):
     
 
 buildtree = Minimax(m, "x")
-tree = buildtree.build_tree(m, "x", 5)
+tree1 = buildtree.build_tree(m, "x", 5)
+state_1= tree1.children[4].children[3].children[4].children[3].value
 
+"""
+tree2 = buildtree.build_tree(state_1, "x", 5)
+state_2= tree2.children[1].children[2].children[6].children[5].value
+tree3 = buildtree.build_tree(state_2, "x", 5)
+state_3= tree3.children[4].children[0].children[6].children[4].value
+"""
+#streak= 2
+#variable = "o"
 
-
-state_now = tree.children[4].children[3].children[4].children[3].value
-streak= 2
-variable = "o"
-
-rank_of_state = rank(state_now)
-printState(state_now)
-streak = check_board(state_now, variable, streak)
-minimax_of_state = minimax (node(state_now), 5, True)
+#rank_of_state = rank(state_now)
+#printState(state_1)
+#streak = check_board(state_now, variable, streak)
+minimax_of_state = minimax (tree1, 2, True)
 
 #print streak
 #print rank_of_state
