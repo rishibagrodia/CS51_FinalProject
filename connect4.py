@@ -7,8 +7,10 @@
 # Connect 4 Module
 # February 27, 2012
 
+import random
 import os
-from minimax_ABP import Minimax
+import time
+from minimax_ABP import *
 
 class Game(object):
     """ Game object that holds state of Connect 4 board and game values
@@ -88,7 +90,7 @@ class Game(object):
         if self.turn == self.players[0]:
             self.turn = self.players[1]
         else:
-            self.turn = self.players[0]
+		    self.turn = self.players[0]
 
         # increment the round
         self.round += 1
@@ -103,7 +105,7 @@ class Game(object):
             # this would be a stalemate :(
             return
         
-        # move is the column that player wants to play
+        # move is the column that player want's to play
         move = player.move(self.board)
 
         for i in xrange(6):

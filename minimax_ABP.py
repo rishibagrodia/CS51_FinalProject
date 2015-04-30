@@ -90,18 +90,20 @@ class Minimax(object):
         
     def rank(self, state, color):
         rank = 0               
-        for i in xrange(7):
+        for i in xrange(6):
             colcount = 0
             for j in xrange(6):
                 if state[i][j] == state[i][j+1]:
                     colcount += 1
                 else: break                    
             if colcount >= 4:
-                rank += 10                
+                rank += 10
+        return rank
+                
 
     def minimax(self, node, depth, color):      
-        if depth == 0: # or node is a terminal node
-            return self.rank(node.value)
+        if depth == 0 or node.children == []:
+            return self.rank(node.value, color)
         if color == "o":
             bestValue = -10
             for i in xrange(7):
@@ -116,7 +118,7 @@ class Minimax(object):
             return bestValue
 
     def bestestMove(self, node, color, depth):     
-        bestMove = None        
+        bestMove = None
         bestValue = -10        
         for i in xrange(7):
             currentval = self.minimax(node.children[i], depth, color)
