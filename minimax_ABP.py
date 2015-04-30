@@ -91,11 +91,57 @@ class Minimax(object):
             return tree
                     
         
+    def check_board(self, state, color, length):
+        # check for vertical's
+        total = 0        
+        for i in xrange(7):
+            count = 0
+            for j in xrange(6):                
+                if state[j][i] == color:
+                        count += 1
+                        if count == length:
+                            total += 1
+                        elif count > length:
+                            total = 0                       
+                else: count = 0
+        
+        # check for horizontal's
+        for j in xrange(6):
+            count = 0
+            for i in xrange(7):                
+                if state[j][i] == color:
+                        count += 1
+                        if count == length:
+                            total += 1
+                        elif count > length:
+                            total = 0
+                else: count = 0                
+        
+            
+        
+        
+        
+        return total     
+            
+            
     def rank(self, state):
             comp = 'o'
             hum = 'x'        
             rank = 0
-            # check for ertical 4's        
+            
+            # check for own vertical 3's and 4's            
+            own_three = self.check_board(state, comp, 3)
+            own_four = self.check_board(state, comp, 4)
+            
+            other_three = self.check_board(state, hum, 3)
+            other_four = self.check_board(state, hum, 4)
+            other_two = self.check_board(state, hum, 2)
+            
+            rank += (-100 * other_three -2500 * other_four +1000* own_three +  2500*own_four)            
+            
+            return rank
+                        
+    """        # check for vertical 4's        
             for i in xrange(7):
                 colcount = 0
                 for j in xrange(5):
@@ -108,35 +154,38 @@ class Minimax(object):
                         rank += 10
                     else:
                         rank -=15
-            return rank
+            return rank """
                 
 
-    def minimax(self, node, depth, color):      
-        if depth == 0 or node.children == []:
-            return self.rank(node.value)
-        if color == "o":
-            bestValue = -10
+    def minimax(self, node, depth, me):
+        value = self.rank(node.value)
+        if depth == 0 or node.children == [] or self.check_board(node.value, 'o', 4) >= 1 or self.check_board(node.value, 'x', 4) >= 1:
+            return value
+        if me:
+            bestValue = -100000
             for i in xrange(7):
-                val = self.minimax(node.children[i], depth - 1, "x")
-            bestValue = max(bestValue, val)
+                val = self.minimax(node.children[i], depth - 1, False)         
+                bestValue = max(bestValue, val)
             return bestValue
         else:
-            bestValue = 10
+            bestValue = 100000
             for i in xrange(7):
-                val = self.minimax(node.children[i], depth - 1, 'o')
-            bestValue = min(bestValue, val)
-            return bestValue
+                val = self.minimax(node.children[i], depth - 1, True)
+                bestValue = min(bestValue, val)
+            return bestValue  
 
-    def bestestMove(self, node, color, depth):     
+    def bestestMove(self, node, depth):     
         bestMove = None
-        bestValue = -100        
+        bestValue = -100000        
         for i in xrange(7):
-            currentval = self.minimax(node.children[i], depth, color)
+            currentval = self.minimax(node.children[i], depth, False)
             if currentval > bestValue:
                 bestValue = currentval
                 bestMove = i
+        print "BEST MOVE IS",bestMove
+        print "BEST VALUE IS",bestValue
         return bestMove
 
     def bestMove(self, difficulty, state, color):
         tree = self.build_tree(state, color, difficulty)      
-        return self.bestestMove(tree, color, difficulty)
+        return self.bestestMove(tree, difficulty)

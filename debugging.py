@@ -200,7 +200,7 @@ def rank(state):
             other_four = check_board(state, hum, 4)
             other_two = check_board(state, hum, 2)
             
-            rank = 100 * other_three - 50 * own_two
+            rank += 100 * other_three - 50 * own_two
             return rank
         
         
@@ -257,11 +257,13 @@ state_3= tree3.children[4].children[0].children[6].children[4].value
 #streak= 2
 #variable = "o"
 
-#rank_of_state = rank(state_now)
-#printState(state_1)
+rank_of_state = rank(state_1)
+printState(tree1.value)
 #streak = check_board(state_now, variable, streak)
-minimax_of_state = minimax (tree1, 2, True)
+#minimax_of_state = minimax (tree1, 2, True)
+
+minimax1 = minimax(tree1, 0, True)
 
 #print streak
-#print rank_of_state
-print minimax_of_state
+print minimax1
+#print minimax_of_state
