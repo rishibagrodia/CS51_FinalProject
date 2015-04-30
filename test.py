@@ -193,7 +193,7 @@ def rank(state):
             other_four = check_board(state, hum, 4)
             other_two = check_board(state, hum, 2)
             
-            rank = -100 * other_two +100 * own_two -1000 * other_three
+            rank = -100 * other_two
             return rank
         
         
@@ -237,7 +237,7 @@ variable = "o"
 rank_of_state = rank(state_now)
 printState(state_now)
 streak = check_board(state_now, variable, streak)
-minimax_of_state = minimax (node(state_now), 1, True)
+minimax_of_state = minimax (node(state_now), 5, True)
 
 #print streak
 #print rank_of_state
