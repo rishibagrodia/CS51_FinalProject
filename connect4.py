@@ -107,14 +107,8 @@ class Game(object):
         
         # move is the column that player want's to play
         
-        mutable = self.board
-        permenent = self.board
-        
         move = player.move(self.board)
-        print "THE CURRENT MOVE IS:",move
-        print "STATE BEFORE MOVE"
-        self.printState()
-
+  
         for i in xrange(6):
             print self.board[i][move]
             if self.board[i][move] == ' ':

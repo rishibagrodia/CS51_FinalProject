@@ -37,6 +37,8 @@ class Minimax(object):
         def 
 """
 
+import copy
+
 class node(object):
     def __init__(self, value):
         self.value = value
@@ -76,10 +78,11 @@ class Minimax(object):
         else:
             new_states = [None] * 7
             for i in xrange(7):
-                new_states[i] = state
+                new_states[i] = copy.deepcopy(state)
                 for j in xrange(6):
                     if new_states[i][j][i] == ' ':
-                        new_states[i][j][i] = color                            
+                        new_states[i][j][i] = color
+                        break                            
             if color == "x":
                 color = "o"
             else: color = "x"
@@ -88,38 +91,45 @@ class Minimax(object):
             return tree
                     
         
-    def rank(self, state, color):
-        rank = 0               
-        for i in xrange(6):
-            colcount = 0
-            for j in xrange(6):
-                if state[i][j] == state[i][j+1]:
-                    colcount += 1
-                else: break                    
-            if colcount >= 4:
-                rank += 10
-        return rank
+    def rank(self, state):
+            comp = 'o'
+            hum = 'x'        
+            rank = 0
+            # check for ertical 4's        
+            for i in xrange(7):
+                colcount = 0
+                for j in xrange(5):
+                    if state[j][i] == state[j+1][i]:
+                        colcount += 1
+                        piece = state[j][i]
+                    else: break                    
+                if colcount >= 4:
+                    if piece == comp:
+                        rank += 10
+                    else:
+                        rank -=15
+            return rank
                 
 
     def minimax(self, node, depth, color):      
         if depth == 0 or node.children == []:
-            return self.rank(node.value, color)
+            return self.rank(node.value)
         if color == "o":
             bestValue = -10
             for i in xrange(7):
                 val = self.minimax(node.children[i], depth - 1, "x")
-                bestValue = max(bestValue, val)
+            bestValue = max(bestValue, val)
             return bestValue
         else:
             bestValue = 10
             for i in xrange(7):
                 val = self.minimax(node.children[i], depth - 1, 'o')
-                bestValue = min(bestValue, val)
+            bestValue = min(bestValue, val)
             return bestValue
 
     def bestestMove(self, node, color, depth):     
         bestMove = None
-        bestValue = -10        
+        bestValue = -100        
         for i in xrange(7):
             currentval = self.minimax(node.children[i], depth, color)
             if currentval > bestValue:
@@ -129,4 +139,4 @@ class Minimax(object):
 
     def bestMove(self, difficulty, state, color):
         tree = self.build_tree(state, color, difficulty)      
-        return 5#self.bestestMove(tree, color, difficulty)
+        return self.bestestMove(tree, color, difficulty)
