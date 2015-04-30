@@ -72,7 +72,7 @@ class Minimax(object):
 
         
     def build_tree(self, state, color, depth):       
-        tree = node(state)        
+        tree = node(state)    
         if depth == 0:
             return tree
         else:
@@ -82,6 +82,7 @@ class Minimax(object):
                 for j in xrange(6):
                     if new_states[i][j][i] == ' ':
                         new_states[i][j][i] = color
+                        printState( new_states[i])
                         break                            
             if color == "x":
                 color = "o"
@@ -140,3 +141,25 @@ class Minimax(object):
     def bestMove(self, difficulty, state, color):
         tree = self.build_tree(state, color, difficulty)      
         return self.bestestMove(tree, color, difficulty)
+
+def printState(state):
+        # cross-platform clear screen
+
+        for i in xrange(5, -1, -1):
+            print("\t"),
+            for j in xrange(7):
+                print("| " + str(state[i][j])),
+            print("|")
+        print("\t  _   _   _   _   _   _   _ ")
+        print("\t  1   2   3   4   5   6   7 ")
+
+m = []
+for i in xrange(6):
+    m.append([])
+    for j in xrange(7):
+        m[i].append(' ')
+    
+
+buildtree = Minimax(m, "x")
+buildtree.build_tree(m, "x", 5)
+       
