@@ -222,8 +222,8 @@ class Minimax(object):
             other_splits = self.check_board(state, hum, 10)            
             other_two = self.check_board(state, hum, 2)
             
-            rank += 1000 * own_four
-            rank -= 1000 * other_four
+            rank += 10000 * own_four
+            rank -= 10000 * other_four
             rank += 35 * own_three
             rank -= 40 * other_three
             rank += 35 * own_splits
