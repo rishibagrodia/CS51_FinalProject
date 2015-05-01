@@ -93,7 +93,8 @@ class Minimax(object):
         
     def check_board(self, state, color, length):
         total = 0 
-        """
+        
+
         # check for vertical's        
         for i in xrange(7):
             count = 0
@@ -117,20 +118,47 @@ class Minimax(object):
                         elif count > length:
                             total -= 1
                 else: count = 0                
-        """
 
+        """
         # check for diag's
         for a in xrange(4):
             for b in xrange(3):
                 for i in xrange(a, 7):
                     count = 0
-                    for j in xrange(b, 6):          
-                            if state[j][i] == color:
-                                count += 1
-                                if count == length: 
+                    c = i
+                    for j in xrange(b, 6):
+                        if c > 6: break
+                        if state[j][c] == color:
+                            count += 1
+                            if count == length: 
+                                total += 1
+                            elif count > length:
+                                total -= 1
+                        c+=1
+        """
+        """                                        
+        # check for horizontal splits 
+        if length == 10:        
+            for j in xrange(6):
+                check = 2
+                count = 0
+                for i in xrange(7):
+                    if state[j][i] == color:
+                        count += 1
+                        if count == check:
+                            if i+2 < 7 or i-2 >= 0:
+                                if state[j][i+1] == ' ' and state[j][i+2] == color:
                                     total += 1
-                                elif count > length:
-                                    total -= 1
+                    else: count = 0
+        """
+        
+        #check for illegal 3's
+
+        
+        return total
+        
+
+
 
         """
         # check for negative diagonal's 
@@ -148,9 +176,6 @@ class Minimax(object):
         """
             
         
-        
-        
-        return total     
             
             
     def rank(self, state):
@@ -167,6 +192,7 @@ class Minimax(object):
             other_two = self.check_board(state, hum, 2)
             
             rank += (-100 * other_three -2500 * other_four +1000* own_three +  2500*own_four)            
+           
             
             return rank
                         
@@ -196,7 +222,6 @@ class Minimax(object):
             if currentval > bestValue and node.children[i].value != state:
                 bestValue = currentval
                 bestMove = i
-                print "in loop"
         print "BEST MOVE IS",bestMove
         print "BEST VALUE IS",bestValue        
         return bestMove
