@@ -32,7 +32,7 @@ class Player(object):
 class AIPlayer(Player):
     
     difficulty = None
-    def __init__(self, name, color, difficulty=5):
+    def __init__(self, name, color, difficulty):
         self.type = "AI"
         self.name = name
         self.color = color
@@ -45,7 +45,7 @@ class Board:
   def __init__(self,other=None):
     self.player = 'X'
     self.opponent = 'O'
-    self.empty = '.'
+    self.empty = ' '
     self.width = 7
     self.height = 6
     self.fields = {}
@@ -94,6 +94,34 @@ class Board:
             return winning
         else:
           winning = [ ]
+   # diagonal
+    for cx in range(self.width-1):
+      sx,sy = max(cx-2,0),abs(min(cx-2,0))
+      winning = [ ]
+      for cy in range(self.height):
+        x,y = sx+cy,sy+cy
+        if x<0 or y<0 or x>=self.width or y>=self.height:
+          continue
+        if self.fields[x,y] == self.opponent:
+          winning.append((x,y))
+          if len(winning) >= 4:
+              return winning
+        else:
+          winning = [ ]
+    # other diagonal
+    for cx in range(self.width-1):
+      sx,sy = self.width-1-max(cx-2,0),abs(min(cx-2,0))
+      winning = [ ]
+      for cy in range(self.height):
+        x,y = sx-cy,sy+cy
+        if x<0 or y<0 or x>=self.width or y>=self.height:
+          continue
+        if self.fields[x,y] == self.opponent:
+          winning.append((x,y))
+          if len(winning) == 4:
+              return winning
+        else:
+          winning = [ ]
    
   def won_player(self):
     # horizontal
@@ -126,7 +154,7 @@ class Board:
           continue
         if self.fields[x,y] == self.player:
           winplayer.append((x,y))
-          if len(winplayer) >= 4:
+          if len(winplayer) == 4:
               return winplayer
         else:
           winplayer = [ ]
@@ -140,7 +168,7 @@ class Board:
           continue
         if self.fields[x,y] == self.player:
           winplayer.append((x,y))
-          if len(winplayer) >= 4:
+          if len(winplayer) == 4:
               return winplayer
         else:
           winplayer = [ ]
@@ -163,11 +191,15 @@ class GUI:
     print(u"Welcome to {0}!".format(self.game_name))
     player_name = str(raw_input("What is Player 1's name? "))
     self.units[0] = Player(player_name, self.colors[0])
-    diff = int(raw_input("How badly do you want to lose to the AI? (1 - 4) "))
-    difficulty = diff
+    while difficulty == 0: 
+        diff = int(raw_input("How badly do you want to lose to the AI? (1 - 3) "))
+        if diff > 3 or diff < 1:
+            print("Invalid input")
+        else:
+            difficulty = diff + 1
     print(u"Generating Computer: Prepare to lose")
     comp_name = "Comp" 
-    self.units[1] = AIPlayer(comp_name, self.colors[1], diff+1)
+    self.units[1] = AIPlayer(comp_name, self.colors[1], difficulty)
     print("{0} will be {1}".format(self.units[0].name, self.colors[0]))    
     print("{0} will be {1}".format(self.units[1].name, self.colors[1]))
     time.sleep(1)      
@@ -192,14 +224,8 @@ class GUI:
       tile.grid(row=self.board.height-1-y, column=x)
       self.tiles[x,y] = tile
     handler = lambda: self.reset()
-    #pauser = lambda: self.pause()
     self.newgame = Button(self.app, command=handler, text='Start Over')
     self.newgame.grid(row=2, column=2, columnspan=(self.board.width/2), sticky="WE")
-    #self.pause = Button(self.app, command=pauser, text='Pause')
-    #self.pause.grid(row=4, column=2, columnspan=(self.board.width/2), sticky="WE")
-    self.T = Text(self.app, height=2, width=30)
-    self.T.insert(END, self.clocktime)
-    self.T.grid(row=3, column=3, columnspan=(self.board.width/2), sticky="WE")
     self.wins = Text(self.app, height=2, width=15)
     self.wins.insert(END, player_name)
     self.wins.insert(END, " Wins:\n%.0f" % p_win)
@@ -234,7 +260,6 @@ class GUI:
     
   def move(self,x):
     global difficulty
-    self.app.update()
     self.board = self.board.move(x)
     self.update()
     fields = self.board.fields
@@ -249,7 +274,7 @@ class GUI:
     global c_win, p_win, t
     for (x,y) in self.board.fields:
       text = self.board.fields[x,y]
-      if (text=='.'):
+      if (text==' '):
         self.tiles[x,y].create_oval(10, 5, 50, 45, fill="yellow", outline="blue", width=1)
       if (text=='X'):
         self.tiles[x,y].create_oval(10, 5, 50, 45, fill="red", outline="blue", width=1)
