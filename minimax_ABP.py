@@ -80,12 +80,12 @@ class Minimax(object):
             for i in xrange(7):
                 new_states[i] = copy.deepcopy(state)
                 for j in xrange(6):
-                    if new_states[i][j][i] == ' ':
+                    if new_states[i][j][i] == '.':
                         new_states[i][j][i] = color
                         break                            
-            if color == "x":
-                color = "o"
-            else: color = "x"
+            if color == "X":
+                color = "O"
+            else: color = "X"
             for i in xrange(7):
                 tree.add_child(self.build_tree(new_states[i], color, depth-1))
             return tree
@@ -125,8 +125,8 @@ class Minimax(object):
             
             
     def rank(self, state):
-            comp = 'o'
-            hum = 'x'        
+            comp = 'O'
+            hum = 'X'        
             rank = 0
             
             # check for own vertical 3's and 4's            
@@ -159,7 +159,7 @@ class Minimax(object):
 
     def minimax(self, node, depth, me):
         value = self.rank(node.value)
-        if depth == 0 or node.children == [] or self.check_board(node.value, 'o', 4) >= 1 or self.check_board(node.value, 'x', 4) >= 1:
+        if depth == 0 or node.children == [] or self.check_board(node.value, 'O', 4) >= 1 or self.check_board(node.value, 'X', 4) >= 1:
             return value
         if me:
             bestValue = -100000
@@ -182,8 +182,8 @@ class Minimax(object):
             if currentval > bestValue:
                 bestValue = currentval
                 bestMove = i
-        print "BEST MOVE IS",bestMove
-        print "BEST VALUE IS",bestValue
+        #print "BEST MOVE IS",bestMove
+        #print "BEST VALUE IS",bestValue
         return bestMove
 
     def bestMove(self, difficulty, state, color):
