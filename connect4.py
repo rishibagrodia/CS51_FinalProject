@@ -23,7 +23,7 @@ class Game(object):
     turn = None
     players = [None, None]
     game_name = u"Connecter Quatre\u2122" # U+2122 is "tm" this is a joke
-    colors = ["x", "o"]
+    colors = ["X", "O"]
     
     def __init__(self):
         self.round = 1

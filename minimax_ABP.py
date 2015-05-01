@@ -80,7 +80,7 @@ class Minimax(object):
             for i in xrange(7):
                 new_states[i] = copy.deepcopy(state)
                 for j in xrange(6):
-                    if new_states[i][j][i] == '.':
+                    if new_states[i][j][i] == ' ':
                         new_states[i][j][i] = color
                         break                            
             if color == "X":
@@ -92,8 +92,8 @@ class Minimax(object):
                     
         
     def check_board(self, state, color, length):
-        total = 0
-        
+        total = 0 
+        """
         # check for vertical's        
         for i in xrange(7):
             count = 0
@@ -103,7 +103,7 @@ class Minimax(object):
                         if count == length:
                             total += 1
                         elif count > length:
-                            total = 0                       
+                            total -= 1                       
                 else: count = 0
         
         # check for horizontal's
@@ -115,26 +115,23 @@ class Minimax(object):
                         if count == length:
                             total += 1
                         elif count > length:
-                            total = 0
+                            total -= 1
                 else: count = 0                
-
-        
-
         """
+
         # check for diag's
-        for i in xrange(7):
-            count = 0            
-            for j in xrange(6):
-                while (i < 7 and j < 6):                
-                    if state[j][i] == color:
-                        count += 1
-                        if count == length: 
-                            total += 1
-                        elif count > length:
-                            total = 0
-                        i += 1
-                        j += 1
-        """
+        for a in xrange(4):
+            for b in xrange(3):
+                for i in xrange(a, 7):
+                    count = 0
+                    for j in xrange(b, 6):          
+                            if state[j][i] == color:
+                                count += 1
+                                if count == length: 
+                                    total += 1
+                                elif count > length:
+                                    total -= 1
+
         """
         # check for negative diagonal's 
         for i in xrange(4):
@@ -145,10 +142,10 @@ class Minimax(object):
                         if count == length:
                             total += 1
                         elif count > length:
-                            total = 0
+                            total -= 0
                 else: count = 0
                 i += 1
-        """                    
+        """
             
         
         
@@ -199,8 +196,9 @@ class Minimax(object):
             if currentval > bestValue and node.children[i].value != state:
                 bestValue = currentval
                 bestMove = i
-        #print "BEST MOVE IS",bestMove
-        #print "BEST VALUE IS",bestValue
+                print "in loop"
+        print "BEST MOVE IS",bestMove
+        print "BEST VALUE IS",bestValue        
         return bestMove
 
     def bestMove(self, difficulty, state, color):
