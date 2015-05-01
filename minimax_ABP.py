@@ -222,8 +222,8 @@ class Minimax(object):
             other_splits = self.check_board(state, hum, 10)            
             other_two = self.check_board(state, hum, 2)
             
-            rank += 1000 * own_four
-            rank -= 1000 * other_four
+            rank += 100000 * own_four
+            rank -= 100000 * other_four
             rank += 350 * own_three
             rank -= 400 * other_three
             rank += 350 * own_splits
@@ -241,13 +241,13 @@ class Minimax(object):
         if depth == 0 or node.children == [] or self.check_board(node.value, 'O', 4) >= 1 or self.check_board(node.value, 'X', 4) >= 1:
             return value
         if me:
-            bestValue = -100000
+            bestValue = -10000000
             for i in xrange(7):
                 val = self.minimax(node.children[i], depth - 1, False)         
                 bestValue = max(bestValue, val)
             return bestValue
         else:
-            bestValue = 100000
+            bestValue = 10000000
             for i in xrange(7):
                 val = self.minimax(node.children[i], depth - 1, True)
                 bestValue = min(bestValue, val)
