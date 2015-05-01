@@ -94,7 +94,6 @@ class Minimax(object):
     def check_board(self, state, color, length):
         total = 0
         
-        """
         # check for vertical's        
         for i in xrange(7):
             count = 0
@@ -118,10 +117,10 @@ class Minimax(object):
                         elif count > length:
                             total = 0
                 else: count = 0                
-        """
+
         
 
-
+        """
         # check for diag's
         for i in xrange(7):
             count = 0            
@@ -135,9 +134,8 @@ class Minimax(object):
                             total = 0
                         i += 1
                         j += 1
-            
-     
-        """               
+        """
+        """
         # check for negative diagonal's 
         for i in xrange(4):
             count = 0
