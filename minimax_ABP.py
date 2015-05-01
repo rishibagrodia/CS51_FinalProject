@@ -92,8 +92,10 @@ class Minimax(object):
                     
         
     def check_board(self, state, color, length):
-        # check for vertical's
-        total = 0        
+        total = 0
+        
+        """
+        # check for vertical's        
         for i in xrange(7):
             count = 0
             for j in xrange(6):                
@@ -116,7 +118,39 @@ class Minimax(object):
                         elif count > length:
                             total = 0
                 else: count = 0                
+        """
         
+
+
+        # check for diag's
+        for i in xrange(7):
+            count = 0            
+            for j in xrange(6):
+                while (i < 7 and j < 6):                
+                    if state[j][i] == color:
+                        count += 1
+                        if count == length: 
+                            total += 1
+                        elif count > length:
+                            total = 0
+                        i += 1
+                        j += 1
+            
+     
+        """               
+        # check for negative diagonal's 
+        for i in xrange(4):
+            count = 0
+            for j in xrange(4,6):                                
+                if state[j][i] == color:
+                        count += 1
+                        if count == length:
+                            total += 1
+                        elif count > length:
+                            total = 0
+                else: count = 0
+                i += 1
+        """                    
             
         
         
@@ -141,21 +175,6 @@ class Minimax(object):
             
             return rank
                         
-    """        # check for vertical 4's        
-            for i in xrange(7):
-                colcount = 0
-                for j in xrange(5):
-                    if state[j][i] == state[j+1][i]:
-                        colcount += 1
-                        piece = state[j][i]
-                    else: break                    
-                if colcount >= 4:
-                    if piece == comp:
-                        rank += 10
-                    else:
-                        rank -=15
-            return rank """
-                
 
     def minimax(self, node, depth, me):
         value = self.rank(node.value)
@@ -174,12 +193,12 @@ class Minimax(object):
                 bestValue = min(bestValue, val)
             return bestValue  
 
-    def bestestMove(self, node, depth):     
+    def bestestMove(self, node, depth, state):     
         bestMove = None
         bestValue = -100000        
         for i in xrange(7):
             currentval = self.minimax(node.children[i], depth, False)
-            if currentval > bestValue:
+            if currentval > bestValue and node.children[i].value != state:
                 bestValue = currentval
                 bestMove = i
         print "BEST MOVE IS",bestMove
@@ -188,4 +207,4 @@ class Minimax(object):
 
     def bestMove(self, difficulty, state, color):
         tree = self.build_tree(state, color, difficulty)      
-        return self.bestestMove(tree, difficulty)
+        return self.bestestMove(tree, difficulty, state)
