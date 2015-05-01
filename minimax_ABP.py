@@ -236,33 +236,35 @@ class Minimax(object):
             return rank
                         
 
-    def minimax(self, node, depth, me):
+    def minimax(self, node, depth, alpha, beta, player):
         value = self.rank(node.value)
         if depth == 0 or node.children == [] or self.check_board(node.value, 'O', 4) >= 1 or self.check_board(node.value, 'X', 4) >= 1:
             return value
-        if me:
-            bestValue = -10000000
+        if player:
+            val = -10000000
             for i in xrange(7):
-                val = self.minimax(node.children[i], depth - 1, False)         
-                bestValue = max(bestValue, val)
-            return bestValue
+                val = max(val, self.minimax(node.children[i], depth - 1, alpha, beta, False))         
+                alpha = max(alpha, val)
+                if beta <= alpha:
+                    break
+            return val
         else:
-            bestValue = 10000000
+            val = 10000000
             for i in xrange(7):
-                val = self.minimax(node.children[i], depth - 1, True)
-                bestValue = min(bestValue, val)
-            return bestValue  
+                val = min(val, self.minimax(node.children[i], depth - 1, alpha, beta, True))
+                beta = min(beta, val)                
+                if beta <= alpha:
+                    break
+            return val  
 
     def bestestMove(self, node, depth, state):     
         bestMove = None
-        bestValue = -100000        
+        bestValue = -10000000        
         for i in xrange(7):
-            currentval = self.minimax(node.children[i], depth, False)
+            currentval = self.minimax(node.children[i], depth, -100000000000, 100000000000, False)
             if currentval > bestValue and node.children[i].value != state:
                 bestValue = currentval
-                bestMove = i
-        print "BEST MOVE IS",bestMove
-        print "BEST VALUE IS",bestValue        
+                bestMove = i        
         return bestMove
 
     def bestMove(self, difficulty, state, color):
