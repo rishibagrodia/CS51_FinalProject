@@ -161,30 +161,109 @@ def printState(state):
         
         
 def check_board(state, color, length):
-        # check for vertical's
-        total = 0        
-        for i in xrange(7):
-            count = 0
-            for j in xrange(6):                
-                if state[j][i] == color:
-                        count += 1
-                        if count == length:
+    total = 0 
+    
+    """
+    # check for UNBLOCKED vertical's        
+    for i in xrange(7):
+        count = 0
+        for j in xrange(6):                
+            if state[j][i] == color:
+                    count += 1
+                    if count == length and j < 5:
+                        if state[j+1][i] == ' ':
                             total += 1
-                        elif count > length:
-                            total = 0                       
-                else: count = 0
-        
-        # check for horizontal's
+                    elif count > length:
+                        total -= 1                       
+            else: 
+                count = 0
+    
+    
+    # check for UNBLOCKED horizontal's
+    for j in xrange(6):
+        count = 0
+        for i in xrange(7):                
+            if state[j][i] == color:
+                    count += 1
+                    if count == length:
+                        if length == 4:                        
+                            total += 1
+                        elif length == 3:
+                            if count == length and (i - 3) >= 0:
+                                if state[j][i-3] == ' ':
+                                    total +=1
+                            elif count == length and i+1 < 7:
+                                if state[j][i+1] == ' ':
+                                    total += 1
+                        elif length == 2:
+                            if count == length and (i-3) >= 0:
+                                if state[j][i-2] == ' ' and state[j][i-3] == ' ':
+                                    total += 1
+                            if count == length and i+2 < 7:
+                                if state[j][i+1] == ' ' and state[j][i+2] == ' ':
+                                    total += 1
+                            if count == length and i+1 < 7 and i-2 >= 0:
+                                if state[j][i+1] == ' ' and state[j][i-2] == ' ':
+                                    total += 1                                                      
+                    elif count > length:
+                        total -= 1
+            else: count = 0                 
+    """
+    
+    # check for positive diagonal's
+    for i in xrange(4):
+        for b in xrange(3):
+            count = 0
+            c = i
+            for j in xrange(b, 6):
+                if c > 6: break
+                if state[j][c] == color:
+                    count += 1
+                    if count == length: 
+                        total += 1
+                    elif count > length:
+                        total -= 1
+                else:
+                    count = 0
+                c+=1
+                
+    
+    """                                        
+    # check for horizontal splits 
+    if length == 10:        
         for j in xrange(6):
+            check = 2
             count = 0
-            for i in xrange(7):                
+            for i in xrange(7):
                 if state[j][i] == color:
-                        count += 1
-                        if count == length:
-                            total += 1
-                else: count = 0                
-        
-        return total        
+                    count += 1
+                    if count == check:
+                        if i+2 < 7 or i-2 >= 0:
+                            if state[j][i+1] == ' ' and state[j][i+2] == color:
+                                total += 1
+                else: count = 0
+    """
+    
+    #check for illegal 3's
+    # check for negative diagonal's
+    for i in xrange(4):
+        for b in xrange(5, 2, -1):
+            count = 0
+            c = i            
+            for j in xrange(b, -1, -1):
+                if c > 6: break
+                if state[j][c] == color:
+                    count += 1
+                    if count == length: 
+                        total += 1
+                    elif count > length:
+                        total -= 1
+                else:
+                    count = 0
+                c+=1 
+    
+    return total
+    
         
 
 def rank(state):
@@ -246,24 +325,25 @@ for i in xrange(6):
 
 buildtree = Minimax(m, "x")
 tree1 = buildtree.build_tree(m, "x", 5)
-state_1= tree1.children[4].children[3].children[4].children[3].value
+state_1= tree1.children[1].children[2].children[2].children[1].children[2].value
 
-"""
+
 tree2 = buildtree.build_tree(state_1, "x", 5)
-state_2= tree2.children[1].children[2].children[6].children[5].value
-tree3 = buildtree.build_tree(state_2, "x", 5)
-state_3= tree3.children[4].children[0].children[6].children[4].value
-"""
+state_2= tree2.children[3].children[3].children[1].value
+
+#tree3 = buildtree.build_tree(state_2, "x", 5)
+#state_3= tree3.children[4].children[0].children[6].children[4].value
+
 #streak= 2
 #variable = "o"
 
-rank_of_state = rank(state_1)
-printState(tree1.value)
+#rank_of_state = rank(state_1)
+printState(state_2)
 #streak = check_board(state_now, variable, streak)
 #minimax_of_state = minimax (tree1, 2, True)
 
-minimax1 = minimax(tree1, 0, True)
+print check_board(state_2, "o", 2)
 
 #print streak
-print minimax1
+
 #print minimax_of_state

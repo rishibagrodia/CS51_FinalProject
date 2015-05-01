@@ -73,7 +73,7 @@ class Minimax(object):
         
     def build_tree(self, state, color, depth):       
         tree = node(state)        
-        if depth == 0:
+        if depth == 0 or self.check_board(state, "X", 4) >= 1 or self.check_board(state, "O", 4) >= 1:
             return tree
         else:
             new_states = [None] * 7
@@ -95,86 +95,114 @@ class Minimax(object):
         total = 0 
         
 
-        # check for vertical's        
+        # check for UNBLOCKED vertical's        
         for i in xrange(7):
             count = 0
             for j in xrange(6):                
                 if state[j][i] == color:
                         count += 1
-                        if count == length:
-                            total += 1
+                        if count == length and j < 5:
+                            if state[j+1][i] == ' ':
+                                total += 1
                         elif count > length:
                             total -= 1                       
-                else: count = 0
+                else: 
+                    count = 0
         
-        # check for horizontal's
+        
+        
+        
+        # check for UNBLOCKED horizontal's
         for j in xrange(6):
             count = 0
             for i in xrange(7):                
                 if state[j][i] == color:
                         count += 1
                         if count == length:
+                            if length == 4:                        
+                                total += 1
+                            elif length == 3:
+                                if count == length and (i - 3) >= 0:
+                                    if state[j][i-3] == ' ':
+                                        total +=1
+                                elif count == length and i+1 < 7:
+                                    if state[j][i+1] == ' ':
+                                        total += 1
+                            elif length == 2:
+                                if count == length and (i-3) >= 0:
+                                    if state[j][i-2] == ' ' and state[j][i-3] == ' ':
+                                        total += 1
+                                if count == length and i+2 < 7:
+                                    if state[j][i+1] == ' ' and state[j][i+2] == ' ':
+                                        total += 1
+                                if count == length and i+1 < 7 and i-2 >= 0:
+                                    if state[j][i+1] == ' ' and state[j][i-2] == ' ':
+                                        total += 1                                                      
+                        elif count > length:
+                            total -= 1
+                else: count = 0 
+
+        
+        # check for positive diagonal's
+        for i in xrange(4):
+            for b in xrange(3):
+                count = 0
+                c = i
+                for j in xrange(b, 6):
+                    if c > 6: break
+                    if state[j][c] == color:
+                        count += 1
+                        if count == length: 
                             total += 1
                         elif count > length:
                             total -= 1
-                else: count = 0                
-
-        """
-        # check for diag's
-        for a in xrange(4):
-            for b in xrange(3):
-                for i in xrange(a, 7):
-                    count = 0
-                    c = i
-                    for j in xrange(b, 6):
-                        if c > 6: break
-                        if state[j][c] == color:
-                            count += 1
-                            if count == length: 
-                                total += 1
-                            elif count > length:
-                                total -= 1
-                        c+=1
-        """
-        """                                        
-        # check for horizontal splits 
+                    else:
+                        count = 0
+                    c+=1
+        
+        # check for negative diagonal's
+        for i in xrange(4):
+            for b in xrange(5, 2, -1):
+                count = 0
+                c = i            
+                for j in xrange(b, -1, -1):
+                    if c > 6: break
+                    if state[j][c] == color:
+                        count += 1
+                        if count == length: 
+                            total += 1
+                        elif count > length:
+                            total -= 1
+                    else:
+                        count = 0
+                    c+=1
+        
+        
+        # check for split threes in positve x direction
         if length == 10:        
             for j in xrange(6):
-                check = 2
                 count = 0
-                for i in xrange(7):
+                for i in xrange(5):
                     if state[j][i] == color:
-                        count += 1
-                        if count == check:
-                            if i+2 < 7 or i-2 >= 0:
-                                if state[j][i+1] == ' ' and state[j][i+2] == color:
-                                    total += 1
-                    else: count = 0
-        """
+                            if state[j][i+1] == color:
+                                    if (state[j][i+1] == ' ' and state[j][i+2] == color): 
+                                        total += 1
+                    else: count = 0   
+            
+            # check for split threes in negative x direction
+            for j in xrange(6):
+                count = 0
+                for i in range(6,1,-1):
+                    if state[j][i] == color:
+                            if state[j][i-1] == color:
+                                    if (state[j][i-1] == ' ' and state[j][i-2] == color): 
+                                        total += 1
+                    else: count = 0   
         
-        #check for illegal 3's
 
         
         return total
         
-
-
-
-        """
-        # check for negative diagonal's 
-        for i in xrange(4):
-            count = 0
-            for j in xrange(4,6):                                
-                if state[j][i] == color:
-                        count += 1
-                        if count == length:
-                            total += 1
-                        elif count > length:
-                            total -= 0
-                else: count = 0
-                i += 1
-        """
-            
         
             
             
@@ -186,12 +214,23 @@ class Minimax(object):
             # check for own vertical 3's and 4's            
             own_three = self.check_board(state, comp, 3)
             own_four = self.check_board(state, comp, 4)
+            own_splits = self.check_board(state, comp, 10)            
+            own_two = self.check_board(state, comp, 2)            
             
             other_three = self.check_board(state, hum, 3)
             other_four = self.check_board(state, hum, 4)
+            other_splits = self.check_board(state, hum, 10)            
             other_two = self.check_board(state, hum, 2)
             
-            rank += (-100 * other_three -2500 * other_four +1000* own_three +  2500*own_four)            
+            rank += 1000 * own_four
+            rank -= 1000 * other_four
+            rank += 350 * own_three
+            rank -= 400 * other_three
+            rank += 350 * own_splits
+            rank -= 400 * other_splits
+            rank += 50 * own_two
+            rank -= 75 * other_two
+                      
            
             
             return rank
